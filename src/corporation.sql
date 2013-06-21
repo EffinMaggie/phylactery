@@ -4,10 +4,11 @@ create table corporation
     name text null,
     founders integer null,
     foundingyear integer not null default (2020 + (abs(random()) % 40)),
+    founderkarma integer not null default 100,
     networth integer null
 );
 
-create table branch
+create table trade
 (
     id integer not null,
     name text not null primary key
@@ -32,13 +33,24 @@ create table costaff
     foreign key (cofid) references cofunction(id)
 );
 
+create table cotrade
+(
+    coid integer not null,
+    baid integer not null,
+
+    primary key (coid, baid),
+
+    foreign key (coid) references corporation(id),
+    foreign key (baid) references trade(id)
+);
+
 insert into cofunction
     (id, description)
     values
     (1, 'Founder')
 ;
 
-insert into branch
+insert into trade
     (id, name)
     values
     (1,  'Pharmaceutical'),
@@ -61,7 +73,9 @@ insert into branch
     (16, 'Hardware'),
     (17, 'Software'),
     (18, 'Security'),
-    (19, 'Technical')
+    (19, 'Technical'),
+    (20, 'Financial'),
+    (21, 'Industrial')
 ;
 
 create view vcorporationaddcharacter as
@@ -75,7 +89,7 @@ for each row begin
     insert into vcorporationaddcharacter
         (coid, karma, cofid)
         select new.id as coid,
-               300 as karma,
+               new.founderkarma as karma,
                1 as cofid
           from seq4
          where b < (1 + abs(random()) % 3);

@@ -36,10 +36,13 @@ insert into namescheme
     (  6,   2,  'first/male-first/male last',                   2),
 
     (100,  11,  'last-name',                                   10),
+    (105,  11,  'last-name trade',                            20),
+    (106,  11,  'first-name last-name',                        5),
+    (107,  11,  'first-name last-name trade',                 10),
     (101,  12,  'last-name-last-name',                         10),
-    (103,  12,  'last-name[1]last-name[1] branch',             10),
+    (103,  12,  'last-name[1]last-name[1] trade',             10),
     (102,  13,  'last-name-last-name-last-name',               10),
-    (104,  13,  'last-name[1]last-name[1]last-name[1] branch', 10)
+    (104,  13,  'last-name[1]last-name[1]last-name[1] trade', 10)
 ;
 
 create table namecomponent
@@ -58,7 +61,7 @@ insert into namecomponent
     (5,  'hyphen'),
     (6,  'space'),
     (7,  'literal'),
-    (8,  'branch'),
+    (8,  'trade'),
     (9,  'first name, founder'),
     (10, 'last name, founder')
 ;
@@ -72,8 +75,8 @@ create table nametemplate
     literal text null,
     ref integer null,
     minlength integer not null default 2,
-    maxlength integer not null default 16,
-    maxsublen integer not null default 16,
+    maxlength integer not null default 12,
+    maxsublen integer not null default 12,
 
     foreign key (nsid) references namescheme(id),
     foreign key (ncid) references namecomponent(id)
@@ -115,43 +118,70 @@ insert into nametemplate
     (5, 2, 5, null,    1,    1,    1),
     (5, 3, 1, null,    3,    8,    8),
     (5, 4, 6, null,    1,    1,    1),
-    (5, 5, 4, null,    2,   16,   16),
+    (5, 5, 4, null,    2,   12,   12),
 
     -- first/male-first/male last
     (6, 1, 2, null,    3,    8,    8),
     (6, 2, 5, null,    1,    1,    1),
     (6, 3, 2, null,    3,    8,    8),
     (6, 4, 6, null,    1,    1,    1),
-    (6, 5, 4, null,    2,   16,   16)
+    (6, 5, 4, null,    2,   12,   12)
 ;
 
 insert into nametemplate
     (nsid, pos, ncid, literal, ref, minlength, maxlength, maxsublen)
     values
     -- last-name
-    (100, 1, 10, null,    0, 3, 16, 16),
+    (100, 1, 10, null,    0, 3, 12, 12),
+    -- last-name trade
+    (105, 1, 10, null,    0, 3, 12, 12),
+    (105, 2,  6, null,    0, 1,  1,  1),
+    (105, 3,  8, null,    0, 3, 20, 20),
+    -- first-name last-name
+    (106, 1,  9, null,    0, 3, 12, 12),
+    (106, 2,  6, null,    0, 1,  1,  1),
+    (106, 3, 10, null,    0, 3, 12, 12),
+    -- first-name last-name trade
+    (107, 1,  9, null,    0, 3, 12, 12),
+    (107, 2,  6, null,    0, 1,  1,  1),
+    (107, 3, 10, null,    0, 3, 12, 12),
+    (107, 4,  6, null,    0, 1,  1,  1),
+    (107, 5,  8, null,    0, 3, 20, 20),
     -- last-name-last-name
-    (101, 1, 10, null,    0, 3, 16, 16),
+    (101, 1, 10, null,    0, 3, 12, 12),
     (101, 2,  5, null, null, 1,  1,  1),
-    (101, 3, 10, null,    1, 3, 16, 16),
-    -- last-name[1]-last-name[1] branch
-    (103, 1, 10, null,    0, 3, 16,  1),
-    (103, 2, 10, null,    1, 3, 16,  1),
+    (101, 3, 10, null,    1, 3, 12, 12),
+    -- last-name[1]-last-name[1] trade
+    (103, 1, 10, null,    0, 3, 12,  1),
+    (103, 2, 10, null,    1, 3, 12,  1),
     (103, 3,  6, null, null, 1,  1,  1),
-    (103, 4,  8, null, null, 3, 16, 16),
+    (103, 4,  8, null, null, 3, 20, 20),
     -- last-name-last-name-last-name
-    (102, 1, 10, null,    0, 3, 16, 16),
+    (102, 1, 10, null,    0, 3, 12, 12),
     (102, 2,  5, null, null, 1,  1,  1),
-    (102, 3, 10, null,    1, 3, 16, 16),
+    (102, 3, 10, null,    1, 3, 12, 12),
     (102, 4,  5, null, null, 1,  1,  1),
-    (102, 5, 10, null,    2, 3, 16, 16),
-    -- last-name[1]-last-name[1]-last-name[1] branch
-    (104, 1, 10, null,    0, 3, 16,  1),
-    (104, 2, 10, null,    1, 3, 16,  1),
-    (104, 3, 10, null,    2, 3, 16,  1),
-    (101, 4,  6, null, null, 1,  1,  1),
-    (104, 5,  8, null, null, 3, 16, 16)
+    (102, 5, 10, null,    2, 3, 12, 12),
+    -- last-name[1]-last-name[1]-last-name[1] trade
+    (104, 1, 10, null,    0, 3, 12,  1),
+    (104, 2, 10, null,    1, 3, 12,  1),
+    (104, 3, 10, null,    2, 3, 12,  1),
+    (104, 4,  6, null, null, 1,  1,  1),
+    (104, 5,  8, null, null, 3, 20, 20)
 ;
+
+create table constrainedmarkov
+(
+    refid integer not null,
+    ntid integer not null,
+    mcid integer not null,
+    result text null,
+    retries integer not null default 20,
+
+    primary key (refid, ntid),
+
+    foreign key (ntid) references nametemplate(id)
+);
 
 create table nametemplateresult
 (
@@ -167,6 +197,12 @@ create table nameresult
     refid integer not null primary key,
     result text null
 );
+
+create view vconstrainedmarkov as
+select
+    null as refid,
+    null as mcid,
+    null as ntid;
 
 create view vnamecharacter as
 select
@@ -195,6 +231,48 @@ create view vcreatenamewusage as
 select
     null as nuid,
     null as refid;
+
+create trigger constrainedmarkovInsert after insert on constrainedmarkov
+for each row begin
+    insert into vconstrainedmarkov
+        (refid, mcid, ntid)
+        select new.refid,
+               new.mcid,
+               new.ntid
+          from seq8
+         where seq8.b < new.retries;
+end;
+
+create trigger vconstrainedmarkovInsert instead of insert on vconstrainedmarkov
+for each row when exists(select 1
+                           from constrainedmarkov, nametemplate
+                          where constrainedmarkov.ntid = nametemplate.id
+                            and constrainedmarkov.ntid = new.ntid
+                            and constrainedmarkov.refid = new.refid
+                            and (   result is null
+                                 or length(result) < minlength
+                                 or length(result) > maxlength)
+                            and retries > 0)
+begin
+    insert or replace into markovconstruct
+        (id, mvcid)
+        select new.mcid as id,
+               new.refid * 60 + new.ntid as mvcid;
+
+    insert into vautoconstruct
+        (steps)
+        select maxlength as steps
+          from nametemplate
+         where id = new.ntid;
+
+    update constrainedmarkov
+       set result = (select result
+                       from markovresult
+                      where mvcid = new.refid * 60 + new.ntid),
+           retries = retries - 1
+     where refid = new.refid
+       and ntid = new.ntid;
+end;
 
 create trigger vnamecharacterInsert instead of insert on vnamecharacter
 for each row begin
@@ -302,117 +380,68 @@ end;
 
 create trigger nametemplateresultInsertFirstNameF after insert on nametemplateresult
 for each row when (select ncid from nametemplate where id = new.ntid) = 1 begin
-    insert or replace into markovconstruct
-        (id, mvcid)
-        select 3 as id,
-               new.refid * 10 + seq8.b as mvcid
-          from seq8
-         where seq8.b < 10;
-
-    insert into vautoconstruct
-        (steps)
-        select maxlength as steps
-          from nametemplate
-         where id = new.ntid;
+    insert into constrainedmarkov
+        (refid, mcid, ntid)
+        values
+        (new.refid, 3, new.ntid);
 
     update nametemplateresult
        set result = (select substr(result, 1, nametemplate.maxsublen)
-                       from markovresult, nametemplate
-                      where markovresult.id = 3
-                        and nametemplate.id = new.ntid
-                        and length(result) >= nametemplate.minlength
-                        and length(result) <= nametemplate.maxlength
-                      order by random()
-                      limit 1)
+                       from constrainedmarkov, nametemplate
+                      where constrainedmarkov.refid = new.refid
+                        and constrainedmarkov.ntid = nametemplate.id
+                        and nametemplate.id = new.ntid)
      where ntid = new.ntid
        and result is null;
 end;
 
 create trigger nametemplateresultInsertFirstNameM after insert on nametemplateresult
 for each row when (select ncid from nametemplate where id = new.ntid) = 2 begin
-    insert or replace into markovconstruct
-        (id, mvcid)
-        select 4 as id,
-               new.refid * 20 + seq8.b as mvcid
-          from seq8
-         where seq8.b < 10;
-
-    insert into vautoconstruct
-        (steps)
-        select maxlength as steps
-          from nametemplate
-         where id = new.ntid;
+    insert into constrainedmarkov
+        (refid, mcid, ntid)
+        values
+        (new.refid, 4, new.ntid);
 
     update nametemplateresult
        set result = (select substr(result, 1, nametemplate.maxsublen)
-                       from markovresult, nametemplate
-                      where markovresult.id = 4
-                        and nametemplate.id = new.ntid
-                        and length(result) >= nametemplate.minlength
-                        and length(result) <= nametemplate.maxlength
-                      order by random()
-                      limit 1)
+                       from constrainedmarkov, nametemplate
+                      where constrainedmarkov.refid = new.refid
+                        and constrainedmarkov.ntid = nametemplate.id
+                        and nametemplate.id = new.ntid)
      where ntid = new.ntid
        and result is null;
 end;
 
 create trigger nametemplateresultInsertFirstNameU after insert on nametemplateresult
 for each row when (select ncid from nametemplate where id = new.ntid) = 3 begin
-    insert or replace into markovconstruct
-        (id, mvcid)
-        select 3 as id,
-               new.refid * 30 + seq8.b as mvcid
-          from seq8
-         where seq8.b < 5
-        union
-        select 4 as id,
-               new.refid * 30 + seq8.b + 5 as mvcid
-          from seq8
-         where seq8.b < 5;
-
-    insert into vautoconstruct
-        (steps)
-        select maxlength as steps
-          from nametemplate
-         where id = new.ntid;
+    insert into constrainedmarkov
+        (refid, mcid, ntid)
+        values
+        (new.refid, 3 + (abs(random()) % 2), new.ntid);
 
     update nametemplateresult
        set result = (select substr(result, 1, nametemplate.maxsublen)
-                       from markovresult, nametemplate
-                      where markovresult.id in (3, 4)
-                        and nametemplate.id = new.ntid
-                        and length(result) >= nametemplate.minlength
-                        and length(result) <= nametemplate.maxlength
-                      order by random()
-                      limit 1)
+                       from constrainedmarkov, nametemplate
+                      where constrainedmarkov.refid = new.refid
+                        and constrainedmarkov.ntid = nametemplate.id
+                        and nametemplate.id = new.ntid)
      where ntid = new.ntid
        and result is null;
 end;
 
 create trigger nametemplateresultInsertLastName after insert on nametemplateresult
 for each row when (select ncid from nametemplate where id = new.ntid) = 4 begin
-    insert or replace into markovconstruct
-        (id, mvcid)
-        select 5 as id,
-               new.refid * 40 + seq8.b as mvcid
-          from seq8
-         where seq8.b < 10;
-
-    insert into vautoconstruct
-        (steps)
-        select maxlength as steps
-          from nametemplate
-         where id = new.ntid;
+    insert into constrainedmarkov
+        (refid, mcid, ntid)
+        values
+        (new.refid, 5, new.ntid);
 
     update nametemplateresult
        set result = (select substr(result, 1, nametemplate.maxsublen)
-                       from markovresult, nametemplate
-                      where markovresult.id = 5
-                        and nametemplate.id = new.ntid
-                        and length(result) >= nametemplate.minlength
-                        and length(result) <= nametemplate.maxlength
-                      order by random()
-                      limit 1)
+                       from constrainedmarkov, nametemplate
+                      where constrainedmarkov.refid = new.refid
+                        and constrainedmarkov.ntid = nametemplate.id
+                        and nametemplate.id = new.ntid)
      where ntid = new.ntid
        and result is null;
 end;
@@ -447,7 +476,7 @@ create trigger nametemplateresultInsertBranch after insert on nametemplateresult
 for each row when (select ncid from nametemplate where id = new.ntid) = 8 begin
     update nametemplateresult
        set result = (select substr(name, 1, (select maxsublen from nametemplate where id = new.ntid))
-                       from branch
+                       from trade
                       order by random()
                       limit 1)
      where ntid = new.ntid
