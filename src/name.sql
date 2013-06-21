@@ -135,17 +135,17 @@ insert into nametemplate
     (100, 1, 10, null,    0, 3, 12, 12),
     -- last-name trade
     (105, 1, 10, null,    0, 3, 12, 12),
-    (105, 2,  6, null,    0, 1,  1,  1),
+    (105, 2,  6, null, null, 1,  1,  1),
     (105, 3,  8, null,    0, 3, 20, 20),
     -- first-name last-name
     (106, 1,  9, null,    0, 3, 12, 12),
-    (106, 2,  6, null,    0, 1,  1,  1),
+    (106, 2,  6, null, null, 1,  1,  1),
     (106, 3, 10, null,    0, 3, 12, 12),
     -- first-name last-name trade
     (107, 1,  9, null,    0, 3, 12, 12),
-    (107, 2,  6, null,    0, 1,  1,  1),
+    (107, 2,  6, null, null, 1,  1,  1),
     (107, 3, 10, null,    0, 3, 12, 12),
-    (107, 4,  6, null,    0, 1,  1,  1),
+    (107, 4,  6, null, null, 1,  1,  1),
     (107, 5,  8, null,    0, 3, 20, 20),
     -- last-name-last-name
     (101, 1, 10, null,    0, 3, 12, 12),
@@ -155,7 +155,7 @@ insert into nametemplate
     (103, 1, 10, null,    0, 3, 12,  1),
     (103, 2, 10, null,    1, 3, 12,  1),
     (103, 3,  6, null, null, 1,  1,  1),
-    (103, 4,  8, null, null, 3, 20, 20),
+    (103, 4,  8, null,    0, 3, 20, 20),
     -- last-name-last-name-last-name
     (102, 1, 10, null,    0, 3, 12, 12),
     (102, 2,  5, null, null, 1,  1,  1),
@@ -167,7 +167,7 @@ insert into nametemplate
     (104, 2, 10, null,    1, 3, 12,  1),
     (104, 3, 10, null,    2, 3, 12,  1),
     (104, 4,  6, null, null, 1,  1,  1),
-    (104, 5,  8, null, null, 3, 20, 20)
+    (104, 5,  8, null,    0, 3, 20, 20)
 ;
 
 create table constrainedmarkov
@@ -472,11 +472,13 @@ for each row when (select ncid from nametemplate where id = new.ntid) = 7 begin
        and refid = new.refid;
 end;
 
-create trigger nametemplateresultInsertBranch after insert on nametemplateresult
+create trigger nametemplateresultInsertTrade after insert on nametemplateresult
 for each row when (select ncid from nametemplate where id = new.ntid) = 8 begin
     update nametemplateresult
        set result = (select substr(name, 1, (select maxsublen from nametemplate where id = new.ntid))
-                       from trade
+                       from trade, cotrade
+                      where trade.id = cotrade.baid
+                        and cotrade.coid = new.refid - 200000
                       order by random()
                       limit 1)
      where ntid = new.ntid

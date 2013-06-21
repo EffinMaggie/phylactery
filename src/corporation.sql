@@ -100,6 +100,14 @@ for each row begin
                         where coid = new.id)
      where id = new.id;
 
+    insert into cotrade
+        (coid, baid)
+        select new.id as coid,
+               trade.id as baid
+          from trade
+        order by random()
+        limit 1;
+
     insert into vnamecorporation
         (coid)
         select corporation.id
