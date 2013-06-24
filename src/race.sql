@@ -27,6 +27,8 @@ create table metatype
     name text not null,
     sentient boolean null,
     karma integer null,
+    tile text not null default '?',
+    mythical integer not null default 0,
 
     foreign key (rid) references race(id)
 );
@@ -147,53 +149,53 @@ insert into racerange
 ;
 
 insert into metatype
-    (id, rid, name, sentient)
+    (id, rid,  name,    sentient, tile, mythical)
     values
-    ( 0,  1,  'human',       1)
+    ( 0,   1,  'human',        1,  '@',        0)
 ;
 
 insert into metatype
-    (id, rid, name, karma)
+    (id, rid,  name,          karma, tile, mythical)
     values
-    ( 1,  2,  'agent',       50),
-    ( 2,  3,  'banshee',     50),
-    ( 3,  3,  'wisp',        -50),
-    ( 4,  3,  'ghost',       null),
-    ( 5,  3,  'poltergeist', null),
-    ( 6,  3,  'sylph',       null),
-    ( 7,  4,  'cat',         null),
-    ( 8,  4,  'manx',        null),
-    ( 9,  4,  'cougar',      100),
-    (10,  4,  'cheetah',     100),
-    (11,  4,  'tiger',       300),
-    (12,  4,  'lynx',        200),
-    (13,  5,  'poodle',      null),
-    (14,  5,  'wolf',        100),
-    (15,  6,  'squirrel',    null),
-    (16,  6,  'rat',         null),
-    (17,  6,  'mouse',       null),
-    (18,  6,  'hamster',     null),
-    (19,  6,  'guinea pig',  null),
-    (20,  7,  'snake',       null),
-    (21,  7,  'cobra',       100),
-    (22,  7,  'rattlesnake', 50),
-    (23,  7,  'wyrm',        900),
-    (24,  7,  'dragon',      1900),
-    (25,  8,  'pixie',       null),
-    (26,  8,  'imp',         50),
-    (27,  8,  'goblin',      100),
-    (28,  8,  'drake',       150),
-    (29,  9,  'salamander',  null),
-    (30,  9,  'newt',        null),
-    (31,  10, 'kestrel',     50),
-    (32,  10, 'sparrow',     null),
-    (33,  10, 'swallow',     null),
-    (34,  10, 'griffin',     500),
-    (35,  11, 'neck',        null),
-    (36,  11, 'strömkarl',   null),
-    (37,  12, 'rabbit',      null),
-    (38,  12, 'pika',        null),
-    (39,  12, 'leveret',     -25),
-    (40,  12, 'hare',        50)
+    ( 1,   2,  'agent',       50,    'A',  0),
+    ( 2,   3,  'banshee',     50,    'B',  1),
+    ( 3,   3,  'wisp',        -50,   'W',  1),
+    ( 4,   3,  'ghost',       null,  'G',  1),
+    ( 5,   3,  'poltergeist', null,  'P',  1),
+    ( 6,   3,  'sylph',       null,  'S',  1),
+    ( 7,   4,  'cat',         null,  'C',  0),
+    ( 8,   4,  'manx',        null,  'M',  0),
+    ( 9,   4,  'cougar',      100,   'C',  0),
+    (10,   4,  'cheetah',     100,   'C',  0),
+    (11,   4,  'tiger',       300,   'T',  0),
+    (12,   4,  'lynx',        200,   'L',  0),
+    (13,   5,  'poodle',      null,  'P',  0),
+    (14,   5,  'wolf',        100,   'W',  0),
+    (15,   6,  'squirrel',    null,  'S',  0),
+    (16,   6,  'rat',         null,  'R',  0),
+    (17,   6,  'mouse',       null,  'M',  0),
+    (18,   6,  'hamster',     null,  'H',  0),
+    (19,   6,  'guinea pig',  null,  'G',  0),
+    (20,   7,  'snake',       null,  'S',  0),
+    (21,   7,  'cobra',       100,   'O',  0),
+    (22,   7,  'rattlesnake', 50,    'R',  0),
+    (23,   7,  'wyrm',        900,   'W',  1),
+    (24,   7,  'dragon',      1900,  'D',  1),
+    (25,   8,  'pixie',       null,  'P',  1),
+    (26,   8,  'imp',         50,    'I',  1),
+    (27,   8,  'goblin',      100,   'G',  1),
+    (28,   8,  'drake',       150,   'D',  1),
+    (29,   9,  'salamander',  null,  'S',  0),
+    (30,   9,  'newt',        null,  'N',  0),
+    (31,   10, 'kestrel',     50,    'K',  0),
+    (32,   10, 'sparrow',     null,  'S',  0),
+    (33,   10, 'swallow',     null,  'S',  0),
+    (34,   10, 'griffin',     500,   'G',  0),
+    (35,   11, 'neck',        null,  'N',  0),
+    (36,   11, 'strömkarl',   null, 'S',  0),
+    (37,   12, 'rabbit',      null,  'R',  0),
+    (38,   12, 'pika',        null,  'P',  0),
+    (39,   12, 'leveret',     -25,   'L',  0),
+    (40,   12, 'hare',        50,    'H',  0)
 ;
 

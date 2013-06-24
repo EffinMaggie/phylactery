@@ -2,10 +2,13 @@ create view voutputansiwant as
 select
     x.b as x,
     y.b as y,
-    case when v.tile is not null then 37
+    case when b.cid = g.pov then 33
+         when b.friendly then 32
+         when b.hostile then 31
+         when v.tile is not null then 37
          else 34
     end as colour,
-    case when v.tile is not null then v.tile
+    case  when v.tile is not null then v.tile
          when b.tile is not null and b.onmap and c.commlinkactive then b.tile
          else ' '
     end as tile
@@ -25,7 +28,7 @@ select
   g.columns - 49 as x,
   y.b + 4 as y,
   37 as colour,
-  k.key || ') ' || i.name as tile
+  k.key || ') ' || i.name || X'1B' || '[K' as tile
 from game as g, seq8 as y, vcharacteritemislot as i, keymap as k
 where g.moid = 2
   and i.cid = g.pov
@@ -40,13 +43,15 @@ select
   0 as x,
   game.lines - 1 as y,
   37 as colour,
-     'Karma: ' || vcharacter.karmatotal || ' (' || vcharacter.karma || ') '
+     vcharacter.name
+  || ', Karma: ' || vcharacter.karmatotal || ' (' || vcharacter.karma || ') '
   || profile.name
   || case when game.moid <> 0 then ' :: ' || gamemode.description else '' end
   || '; Next: '
     || case when vnext.aid is not null then (select name from attribute where vnext.aid = id)
             when vnext.sid is not null then (select name from skill where vnext.sid = id) end
     || ' +1 (' || vnext.karma || ')'
+  || ' turn #' || game.turn
   || X'1B' || '[K'
   as tile
 from board, game, vcharacter, profile, gamemode, vnext

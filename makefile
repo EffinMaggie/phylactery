@@ -32,7 +32,7 @@ scrub: clean
 
 databases: $(DATABASES)
 
-base.phylactery: src/sequence.sql src/markov.sql src/markov-data.sql src/name.sql src/corporation.sql src/game.sql src/skills.sql src/effect.sql src/race.sql src/profile.sql src/character.sql src/party.sql src/dice.sql src/board.sql src/level.sql src/visibility.sql src/spherical.sql src/shadow.sql src/vision.sql src/inventory.sql src/command.sql src/output.sql $(SQLITEMATHLIB)
+base.phylactery: src/sequence.sql src/markov.sql src/markov-data.sql src/name.sql src/corporation.sql src/corporation-history.sql src/game.sql src/skills.sql src/effect.sql src/race.sql src/profile.sql src/character.sql src/party.sql src/dice.sql src/board.sql src/level.sql src/visibility.sql src/spherical.sql src/shadow.sql src/vision.sql src/inventory.sql src/coordination.sql src/command.sql src/ai.sql src/output.sql $(SQLITEMATHLIB)
 	rm -f $@*
 	cat $(filter-out $(SQLITEMATHLIB),$^) | $(SQLITE3) $@
 	$(SQLITE3) $@ analyze

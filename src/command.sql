@@ -189,8 +189,11 @@ insert into keymap
     ('w', 92, 3), 
     ('x', 93, 3), 
     ('y', 94, 3), 
-    ('z', 95, 3) 
-    ;
+    ('z', 95, 3), 
+
+    -- mode: confirm
+    (' ',  2, 4)
+;
 
 -- data table to match commands to a direction
 
@@ -320,10 +323,6 @@ select
     null as cmid,
     null as moid;
 
-create view vsimulate as
-select
-    null as turn;
-
 create trigger vinvokecommandInsertRoamSearch instead of insert on vinvokecommand
 for each row when new.cmid = 22 and new.moid = 0 begin
     update game
@@ -333,13 +332,6 @@ end;
 
 create trigger vinvokecommandInsertRoam instead of insert on vinvokecommand
 for each row when new.cmid is not null and new.cmid <> 22 and new.moid = 0 begin
-    update game
-       set refresh = (new.cmid = 1),
-           turn = case when new.cmid in (1, 30, 31, 32) then turn else turn + 1 end,
-           msid = case when (select max(id) from message) > msid then msid + 1 else msid end,
-           cmid = case when new.cmid in (30, 31, 32) then new.cmid else null end,
-           moid = case when new.cmid in (30, 31, 32) then new.cmid - 29 else 0 end;
-
     update character
        set commlinkactive = not commlinkactive
      where new.cmid = 23
@@ -349,7 +341,19 @@ for each row when new.cmid is not null and new.cmid <> 22 and new.moid = 0 begin
         (x, y)
         select x, y from command2direction where cmid = new.cmid;
 
+    insert into vspendtime
+        (cid, time)
+        values
+        ((select pov from game where game.id = 1), 0.00001);
+
     insert into vgameoffsetupdate (gid) select 1 as gid where new.cmid = 1 or (new.cmid >= 11 and new.cmid <= 18);
+
+    update game
+       set refresh = (new.cmid = 1),
+           turn = case when new.cmid in (1, 30, 31, 32) then turn else turn + 1 end,
+           msid = case when (select max(id) from message) > msid then msid + 1 else msid end,
+           cmid = case when new.cmid in (30, 31, 32) then new.cmid else null end,
+           moid = case when new.cmid in (30, 31, 32) then new.cmid - 29 else 0 end;
 end;
 
 create trigger vinvokecommandInsertDirection instead of insert on vinvokecommand
@@ -398,4 +402,189 @@ for each row when new.key is not null begin
         where key = new.key
           and keymap.moid = game.moid
           and game.id = 1;
+
+    -- someone remind me to do this intelligently
+
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
+    insert into vsimulate
+        (cid)
+        select pov
+          from game, pcharacter
+         where game.id = 1
+           and game.paid <> pcharacter.paid
+           and pcharacter.cid = game.pov;
 end;

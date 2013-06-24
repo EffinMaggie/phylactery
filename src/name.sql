@@ -321,7 +321,9 @@ for each row begin
     insert into vnamecorporationu
         (coid, nuid)
         select corporation.id as coid, 
-               10 + corporation.founders as nuid
+               (select count(*)
+                  from cotrade
+                 where cotrade.coid = new.coid) * 10 + corporation.founders as nuid
           from corporation
          where corporation.id = new.coid;
 end;

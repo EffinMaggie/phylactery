@@ -19,12 +19,14 @@ insert into gamemode
     (0,  'Roam'),
     (1,  'Select Direction'),
     (2,  'Select Inventory Slot'),
-    (3,  'Select Target');
+    (3,  'Select Target'),
+    (4,  'Confirm');
 
 create table game
 (
     id integer not null primary key,
     paid integer not null default 1,
+    mc integer not null default 1,
     pov integer not null default 1,
     columns integer not null default 80,
     lines integer not null default 25,
@@ -36,10 +38,16 @@ create table game
     cmid integer null,
     msid integer not null default -1,
     -- level generator parameters
-    levelwidth integer not null default 50,
-    levelheight integer not null default 20,
+    levelwidth integer not null default 30,
+    levelheight integer not null default 15,
+    -- meta parameters
+    gamedate number not null default 2479045,
+    -- corporate founding range
+    foundingdatestart integer not null default 2458849,
+    foundingdateend integer not null default 2473459,
 
     -- foreign key (paid) references party(id)
+    -- foreign key (mc) references character(id)
     -- foreign key (pov) references character(id)
     foreign key (moid) references gamemode(id)
     -- foreign key (cmid) references command(id)
@@ -58,29 +66,33 @@ select null as x,
 create view vgameoffsetupdate as
 select null as gid;
 
+create view vspendtime as
+select null as cid,
+       null as time;
+
 create trigger gameInsert after insert on game
 for each row begin
     insert into corporation
-        (id)
-        values
-        (1);
+        (founders)
+        select null
+          from seq8
+         where seq8.b < 20;
 
-    insert into character
-        (karma, sentient)
-        values
-        (500, 1);
-
-    update game
-       set pov = last_insert_rowid()
-     where game.id = new.id;
-
-    insert into vparty
+    insert into party
         (members, karma, sentient)
         values
         (4, 500, 1);
 
     update game
-       set paid = (select max(id) from party)
+       set paid = last_insert_rowid(),
+           mc = (select cid
+                   from pcharacter
+                  where paid = last_insert_rowid()
+                  limit 1),
+           pov = (select cid
+                    from pcharacter
+                   where paid = last_insert_rowid()
+                   limit 1)
      where game.id = new.id;
 
     insert into vgeneratelevel
@@ -88,15 +100,16 @@ for each row begin
         values
         (new.id);
 
-    update board
-       set cid = (select pov
-                    from game
-                   where id = new.id)
-     where  id = (select id
-                    from vboard
-                   where not opaque
-                   order by random()
-                   limit 1);
+    insert into vplaceparty
+        (paid)
+        select paid
+          from game
+         where game.id = new.id;
+
+    insert into vencounter
+        (gid)
+        values
+        (new.id);
 
     insert into vgameoffsetupdate
         (gid)
@@ -104,9 +117,17 @@ for each row begin
         (new.id);
 end;
 
-create trigger gameUpdate after update on game
+create trigger gameUpdateOffset after update on game
 for each row when old.lines <> new.lines or old.columns <> new.columns or old.moid <> new.moid begin
     insert into vgameoffsetupdate
+        (gid)
+        values
+        (new.id);
+end;
+
+create trigger gameUpdatePOV after update on game
+for each row when old.turn <> new.turn begin
+    insert into vnextcharacterturn
         (gid)
         values
         (new.id);
@@ -137,4 +158,11 @@ for each row begin
           from board, game
          where board.cid = game.pov
            and game.id = new.gid;
+end;
+
+create trigger vspendtimeInsert instead of insert on vspendtime
+for each row begin
+    update character
+       set nextturn = nextturn + new.time
+     where id = new.cid;
 end;

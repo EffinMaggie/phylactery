@@ -19,6 +19,7 @@ create table character
     commlinkactive boolean not null default 1,
     sentient boolean not null default 0,
     sex boolean not null default -1,
+    nextturn number null,
 
     foreign key (pid) references profile(id),
     foreign key (mid) references metatype(id),

@@ -32,15 +32,21 @@ select
     b.id as id,
     b.x as x,
     b.y as y,
-    case when cid = g.pov then '@'
+    b.cid as cid,
+    case when m.tile is not null then m.tile
          when tile.tile is not null then tile.tile
-         else null end
+         else 'x' end
       as tile,
-    (cid is not null or tile.opaque) as opaque,
-    tile.onmap as onmap
+    (b.cid is not null or tile.opaque) as opaque,
+    tile.onmap as onmap,
+    p.paid = g.paid as friendly,
+    p.paid <> g.paid as hostile
 from board as b,
      tile,
      game as g
+left join character as c on c.id = b.cid
+left join metatype as m on c.mid = m.id
+left join pcharacter as p on b.cid = p.cid
 where g.id = 1
   and b.tid = tile.id;
 

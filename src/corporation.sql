@@ -3,7 +3,7 @@ create table corporation
     id integer not null primary key,
     name text null,
     founders integer null,
-    foundingyear integer not null default (2020 + (abs(random()) % 40)),
+    foundingdate integer null,
     founderkarma integer not null default 100,
     networth integer null
 );
@@ -95,7 +95,14 @@ for each row begin
          where b < (1 + abs(random()) % 3);
 
     update corporation
-       set founders = (select count(*)
+       set foundingdate = 
+                coalesce (new.foundingdate,
+                          (select   game.foundingdatestart
+                                  + abs(random()) % (  game.foundingdateend
+                                                     - game.foundingdatestart)
+                             from game
+                            where game.id = 1)),
+           founders = (select count(*)
                          from costaff
                         where coid = new.id)
      where id = new.id;

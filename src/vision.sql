@@ -7,7 +7,8 @@ from vboard as b,
      shadow as s,
      board as p,
      board as q,
-     game as g
+     game as g,
+     pcharacter as pc
 where g.id = 1
   and p.cid = g.pov
   and b.opaque
