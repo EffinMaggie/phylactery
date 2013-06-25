@@ -3,13 +3,15 @@ select
     x.b as x,
     y.b as y,
     case when b.cid = g.pov then 33
+         when v.tile is null and (b.friendly or b.hostile) then 34
          when b.friendly then 32
          when b.hostile then 31
          when v.tile is not null then 37
          else 34
     end as colour,
-    case  when v.tile is not null then v.tile
+    case when v.tile is not null then v.tile
          when b.tile is not null and b.onmap and c.commlinkactive then b.tile
+         when (b.hostile or b.friendly) and c.commlinkactive then '?'
          else ' '
     end as tile
 from seq8 as x,

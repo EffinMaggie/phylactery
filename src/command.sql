@@ -325,6 +325,11 @@ select
 
 create trigger vinvokecommandInsertRoamSearch instead of insert on vinvokecommand
 for each row when new.cmid = 22 and new.moid = 0 begin
+    insert into vspendtime
+        (cid, time)
+        values
+        ((select pov from game where game.id = 1), 0.0002);
+
     update game
        set turn = turn + 1,
            msid = case when (select max(id) from message) > msid then msid + 1 else msid end;
@@ -374,9 +379,10 @@ end;
 create trigger vinvokecommanInsertInventory instead of insert on vinvokecommand
 for each row when new.cmid is not null and new.moid = 2 begin
     update game
-       set moid = 0,
+       set refresh = 1,
+           moid = 0,
            cmid = null,
-           turn = turn + 1;
+           turn = case when new.cmid = 2 then turn else turn + 1 end;
 end;
 
 create trigger vinvokecommandInsertTarget instead of insert on vinvokecommand
@@ -405,186 +411,8 @@ for each row when new.key is not null begin
 
     -- someone remind me to do this intelligently
 
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
-    insert into vsimulate
-        (cid)
-        select pov
-          from game, pcharacter
-         where game.id = 1
-           and game.paid <> pcharacter.paid
-           and pcharacter.cid = game.pov;
+    insert into vsimulatenpcmoves
+        (gid)
+        select 1 as gid
+          from seq8;
 end;
